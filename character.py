@@ -24,37 +24,32 @@ ch_data=pd.read_csv('psyc.csv')
 # In[3]:
 
 
-ch_data.head()
+
 
 
 # In[4]:
 
 
-ch_data.describe()
 
 
-# In[5]:
 
-
-ch_data.shape
+# In[5]
 
 
 # In[6]:
 
 
-ch_data.nunique()
-
 
 # In[7]:
 
 
-ch_data.isna().sum()
+
 
 
 # In[8]:
 
 
-ch_data.head()
+
 
 
 # In[9]:
@@ -71,13 +66,12 @@ ch_data['Personality'] = encoded_values
 # In[10]:
 
 
-ch_data.dtypes
 
 
 # In[11]:
 
 
-label_mapping
+
 
 
 # In[12]:
@@ -95,7 +89,6 @@ ch_data=encoder.fit_transform(ch_data)
 # In[14]:
 
 
-ch_data
 
 
 # In[15]:
@@ -107,7 +100,7 @@ corr=ch_data.corr()
 # In[16]:
 
 
-corr["Personality"].sort_values()
+
 
 
 # In[17]:
@@ -140,13 +133,12 @@ data_test = ch_data.iloc[test_indices]    # For a DataFrame
 # In[18]:
 
 
-data_train
 
 
 # In[19]:
 
 
-data_test
+
 
 
 # In[20]:
@@ -166,8 +158,7 @@ y_test=data_test["Personality"]
 svc=SVC(kernel="poly",C=4,gamma='scale')
 svc.fit(X_train,y_train)
 y_svc_p=svc.predict(X_test)
-print(accuracy_score(y_test,y_svc_p))
-print(confusion_matrix(y_test,y_svc_p))
+
 
 
 # In[23]:
@@ -204,7 +195,7 @@ import streamlit as st
 # In[30]:
 
 
-st.title('Machine Learning Model Deployment')
+st.title('You are 74 perecnt related to ')
 st.sidebar.header('User Input Features')
 
 
@@ -221,9 +212,6 @@ feature7=st.sidebar.slider('extraversion ', min_value=1, max_value=10, value=3)
 
 
 # In[32]:
-
-
-X_train.columns
 
 
 # In[40]:
@@ -248,20 +236,24 @@ prediction=svc.predict(input_data)
 
 # In[42]:
 
+def get_key_from_value(dictionary, search_value):
+    for key, value in dictionary.items():
+        if value == search_value:
+            return key
+    return None  # Return None if the value is not found
 
-st.write(prediction[0])
+key_for_value = get_key_from_value(label_mapping, prediction[0])
+
+
+
+
+
+st.write(key_for_value)
 
 
 # In[43]:
 
 
-get_ipython().system('streamlit run c.py')
-
-
-# In[44]:
-
-
-get_ipython().system('streamlit run --server.enableCORS=false --server.port=8501 character.ipynb')
 
 
 # 
