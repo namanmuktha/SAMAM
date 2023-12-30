@@ -6,12 +6,8 @@
 
 import numpy as np 
 import pandas as pd
-from sklearn.model_selection import train_test_split
-from sklearn.tree import DecisionTreeClassifier
 from sklearn.svm import SVC
-from sklearn.neighbors import KNeighborsClassifier
-from sklearn.naive_bayes import MultinomialNB
-from sklearn.metrics import accuracy_score,confusion_matrix,classification_report
+from sklearn.metrics import accuracy_score,confusion_matrix
 import warnings
 warnings.filterwarnings('ignore')
 import category_encoders as ce
@@ -117,7 +113,28 @@ corr["Personality"].sort_values()
 # In[17]:
 
 
-data_train,data_test=train_test_split(ch_data,test_size=0.2,random_state=123)
+# Set a seed for reproducibility
+np.random.seed(123)
+
+# Get the number of rows in your dataset
+num_rows = len(ch_data)
+
+# Shuffle the indices of the rows
+shuffled_indices = np.random.permutation(num_rows)
+
+# Define the percentage for the training set
+train_percentage = 0.8
+
+# Calculate the number of rows for the training set
+num_train_rows = int(train_percentage * num_rows)
+
+# Split the indices into training and testing sets
+train_indices = shuffled_indices[:num_train_rows]
+test_indices = shuffled_indices[num_train_rows:]
+
+# Create the training and testing sets
+data_train = ch_data.iloc[train_indices]  # For a DataFrame
+data_test = ch_data.iloc[test_indices]    # For a DataFrame
 
 
 # In[18]:
@@ -141,14 +158,6 @@ X_test=data_test.drop(["Personality"],axis=1)
 y_test=data_test["Personality"]
 
 
-# In[21]:
-
-
-knn=KNeighborsClassifier(n_neighbors=11,weights="distance",algorithm="kd_tree")
-knn.fit(X_train,y_train)
-y_knn_p=knn.predict(X_test)
-print(accuracy_score(y_test,y_knn_p))
-print(confusion_matrix(y_test,y_knn_p))
 
 
 # In[22]:
@@ -164,104 +173,29 @@ print(confusion_matrix(y_test,y_svc_p))
 # In[23]:
 
 
-nb=MultinomialNB()
-nb.fit(X_train,y_train)
-y_nb_p=nb.predict(X_test)
-print(accuracy_score(y_test,y_nb_p))
-print(confusion_matrix(y_test,y_nb_p))
+
 
 
 # In[24]:
 
 
-dt=DecisionTreeClassifier()
-dt.fit(X_train,y_train)
-y_p=dt.predict(X_test)
-print(accuracy_score(y_test,y_p))
-print(confusion_matrix(y_test,y_p))
+
 
 
 # In[25]:
 
 
-from sklearn.ensemble import RandomForestClassifier
-rfc=RandomForestClassifier()
-rfc.fit(X_train,y_train)
-y_p1=rfc.predict(X_test)
-print(accuracy_score(y_test,y_p1))
-print(confusion_matrix(y_test,y_p1))
 
 
 # In[26]:
 
 
-from sklearn.model_selection import GridSearchCV
+
 
 
 # In[27]:
 
 
-svm_model = SVC()
-
-# Define the parameter grid to search
-param_grid = {
-    'C': [0.1, 1, 10],
-    'kernel': ['linear', 'rbf', 'poly'],
-    'gamma': ['scale', 'auto']
-}
-
-# Create a GridSearchCV object
-grid_search = GridSearchCV(estimator=svm_model, param_grid=param_grid, cv=5)
-
-# Fit the model with different hyperparameter combinations
-grid_search.fit(X_train, y_train)
-
-# Get the best parameters and the corresponding model
-best_params = grid_search.best_params_
-best_model = grid_search.best_estimator_
-
-# Predictions on the test set using the best model
-y_pred = best_model.predict(X_test)
-
-# Evaluate the performance
-accuracy = accuracy_score(y_test, y_pred)
-print(f'Best Parameters: {best_params}')
-print(f'Accuracy on Test Set: {accuracy:.2f}')
-
-
-# In[28]:
-
-
-dt_classifier = DecisionTreeClassifier()
-
-# Define the parameter grid to search
-param_grid = {
-    'criterion': ['gini', 'entropy'],
-    'max_depth': [None, 10, 20, 30],
-    'min_samples_split': [2, 5, 10],
-    'min_samples_leaf': [1, 2, 4]
-}
-
-# Create a GridSearchCV object
-grid_search = GridSearchCV(estimator=dt_classifier, param_grid=param_grid, cv=5, scoring='accuracy')
-
-# Fit the model with different hyperparameter combinations
-grid_search.fit(X_train, y_train)
-
-# Get the best parameters and the corresponding model
-best_params = grid_search.best_params_
-best_model = grid_search.best_estimator_
-
-# Predictions on the test set using the best model
-y_pred = best_model.predict(X_test)
-
-# Evaluate the performance
-accuracy = accuracy_score(y_test, y_pred)
-print(f'Best Parameters: {best_params}')
-print(f'Accuracy on Test Set: {accuracy:.2f}')
-
-
-# In[29]:
 
 
 import streamlit as st
