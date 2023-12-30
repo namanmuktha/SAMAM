@@ -1,10 +1,11 @@
 # model_deploy.py
 
-import joblib
+import pickle
 
 def load_model():
-    # Load your trained model
-    model = joblib.load("model.pkl")
+    # Load your trained model using pickle
+    with open("model.pkl", 'rb') as f:
+        model = pickle.load(f)
     return model
 
 def predict(model, input_data):

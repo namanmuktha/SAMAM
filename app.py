@@ -1,7 +1,6 @@
 # app.py
 
 import streamlit as st
-import pandas as pd
 from model_deploy import load_model, predict
 
 def get_mental_health_condition(prediction):
