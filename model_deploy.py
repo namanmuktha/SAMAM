@@ -4,7 +4,7 @@ import joblib
 
 def load_model():
     # Load your trained model
-    model = joblib.load("/Users/namanmuktha/Desktop/mini/model.pkl")
+    model = joblib.load("model.pkl")
     return model
 
 def predict(model, input_data):
