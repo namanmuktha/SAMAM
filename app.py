@@ -41,6 +41,7 @@ def main():
         'trouble.concentrating', 'blaming.yourself', 'hallucinations',
         'repetitive.behavior', 'increased.energy', 'age'
     ]
+    
 
     user_inputs = {}
     for feature in features:
